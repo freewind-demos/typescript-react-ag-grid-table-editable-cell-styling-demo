@@ -16,13 +16,13 @@ function DeleteRowButton(props: ICellRendererParams) {
 }
 
 const columnDefs: ColDef[] = [{
-  headerName: "Make", field: "make", sortable: true, filter: true, editable: true, width: 100
+  headerName: "Make", field: "make", sortable: true, filter: true, width: 100
 }, {
-  headerName: "Model", field: "model", sortable: true, filter: true, editable: true, width: 100
+  headerName: "Model", field: "model", sortable: true, filter: true, editable: true, width: 100,
+  cellClass: 'editable-cell'
 }, {
-  headerName: "Price", field: "price", sortable: true, filter: true, editable: true, width: 100
-}, {
-  headerName: "Operation", field: "operation", cellRendererFramework: DeleteRowButton
+  headerName: "Price", field: "price", sortable: true, filter: true, editable: true, width: 100,
+  cellClass: 'editable-cell'
 }]
 
 type Data = {
@@ -40,38 +40,8 @@ const rowData: Data[] = [{
   }]
 ;
 
-function newData(): Data {
-  return {
-    make: "NewMake", model: "NewModel", price: 999
-  }
-}
 
 export default function Hello() {
-  const [gridApi, setGridApi] = useState<GridApi>(null as any)
-
-  function addNewRow() {
-    gridApi.updateRowData({add: [newData()]});
-  }
-
-  function addNewRowAndEdit() {
-    const result = gridApi.updateRowData({add: [newData()]});
-    const addedNode = result.add[0]
-    gridApi.setFocusedCell(addedNode.rowIndex, 'make');
-    gridApi.startEditingCell({
-      rowIndex: addedNode.rowIndex,
-      colKey: 'make',
-    });
-  }
-
-  function clearAll() {
-    gridApi.setRowData([]);
-  }
-
-  function removeSelected() {
-    const selectedRows = gridApi.getSelectedRows();
-    gridApi.updateRowData({remove: selectedRows});
-  }
-
   return <div>
     <h1>Hello React-AgGrid</h1>
     <div
@@ -81,17 +51,11 @@ export default function Hello() {
         width: '600px'
       }}
     >
-      <div>
-        <button onClick={addNewRow}>Add</button>
-        <button onClick={addNewRowAndEdit}>Add & Edit</button>
-        <button onClick={clearAll}>Clear All</button>
-        <button onClick={removeSelected}>Remove Selected</button>
-      </div>
       <AgGridReact
         columnDefs={columnDefs}
         rowSelection='multiple'
         rowData={rowData}
-        onGridReady={params => setGridApi(params.api)}>
+        singleClickEdit={true}>
       </AgGridReact>
     </div>
   </div>

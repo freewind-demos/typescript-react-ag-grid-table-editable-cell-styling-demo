@@ -1,5 +1,6 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const path = require('path');
+const postcssNested = require('postcss-nested');
 
 module.exports = {
   mode: 'development',
@@ -15,17 +16,23 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.css$/,
+        test: /\.p?css$/,
         use: [
           {loader: 'style-loader'},
-          {loader: 'css-loader'}
+          {loader: 'css-loader'},
+          {
+            loader: 'postcss-loader',
+            options: {
+              plugins: [postcssNested()]
+            }
+          },
         ]
       },
       {
-      test: /\.tsx?$/,
-      loader: 'ts-loader',
-      exclude: /node_modules/
-    }]
+        test: /\.tsx?$/,
+        loader: 'ts-loader',
+        exclude: /node_modules/
+      }]
   },
   plugins: [
     new HtmlWebpackPlugin()
